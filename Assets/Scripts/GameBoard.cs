@@ -14,6 +14,8 @@ public class GameBoard : MonoBehaviour
 
 	private GameTile[] _tiles;
 
+	private Queue<GameTile> _searchFrontier = new Queue<GameTile>();
+
 	public void Initialize(Vector2Int size)
 	{
 		this._size = size;
@@ -35,9 +37,43 @@ public class GameBoard : MonoBehaviour
 				if (x > 0)
 				{
 					GameTile.MakeEastWestNeighbors(tile, _tiles[i - 1]);
+				}
+
+				if (y > 0)
+				{
 					GameTile.MakeNorthSouthNeighbors(tile, _tiles[i - size.x]);
 				}
 			}
+		}
+
+		FindPaths();
+	}
+
+	private void FindPaths()
+	{
+		foreach (var tile in _tiles)
+		{
+			tile.ClearPath();
+		}
+
+		_tiles[0].BecomeDestination();
+		_searchFrontier.Enqueue(_tiles[0]);
+
+		while (_searchFrontier.Count > 0)
+		{
+			var t = _searchFrontier.Dequeue();
+			if (t != null)
+			{
+				_searchFrontier.Enqueue(t.GrowPathNorth());
+				_searchFrontier.Enqueue(t.GrowPathEast());
+				_searchFrontier.Enqueue(t.GrowPathSouth());
+				_searchFrontier.Enqueue(t.GrowPathWest());
+			}
+		}
+
+		foreach (var t in _tiles)
+		{
+			t.ShowPath();
 		}
 	}
 }

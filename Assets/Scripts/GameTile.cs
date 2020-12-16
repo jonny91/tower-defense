@@ -10,6 +10,12 @@ public class GameTile : MonoBehaviour
 
 	public bool HasPath => _distance != int.MaxValue;
 
+	private static Quaternion
+		northRotation = Quaternion.Euler(90, 0, 0),
+		eastRotation = Quaternion.Euler(90, 90, 0),
+		southRotation = Quaternion.Euler(90, 180, 0),
+		westRotation = Quaternion.Euler(90, 270, 0);
+
 	/// <summary>
 	/// 如果一个瓦片是第二个瓦片的东邻，则第二个瓦片是第一个瓦片的西邻
 	/// </summary>
@@ -41,6 +47,22 @@ public class GameTile : MonoBehaviour
 		neighbor._nextOnPath = this;
 
 		return neighbor;
+	}
+
+	public void ShowPath()
+	{
+		if (_distance == 0)
+		{
+			Arrow.gameObject.SetActive(false);
+			return;
+		}
+
+		Arrow.gameObject.SetActive(true);
+		Arrow.localRotation =
+			_nextOnPath == _north ? northRotation :
+			_nextOnPath == _east ? eastRotation :
+			_nextOnPath == _south ? southRotation :
+			westRotation;
 	}
 
 	public void ClearPath()
