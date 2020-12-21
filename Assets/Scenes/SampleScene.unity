@@ -153,6 +153,7 @@ MonoBehaviour:
   Ground: {fileID: 634507571}
   TilePrefab: {fileID: 4887746192439659828, guid: 566c2c90a1109427085f7cd41a8cb80c,
     type: 3}
+  GrideTexture: {fileID: 2800000, guid: 0b0cc0e10f9d443d3b485ea7f9c98415, type: 3}
 --- !u!4 &510689918
 Transform:
   m_ObjectHideFlags: 0
@@ -468,6 +469,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoardSize: {x: 11, y: 11}
   Board: {fileID: 510689917}
+  TileContentFactory: {fileID: 11400000, guid: dc805fe146afa49508d534c7a0e96014, type: 2}
 --- !u!4 &1334120942
 Transform:
   m_ObjectHideFlags: 0

@@ -8,6 +8,8 @@ public class GameTile : MonoBehaviour
 	private GameTile _north, _east, _south, _west, _nextOnPath;
 	private int _distance;
 
+	public bool IsAlternative { get; set; }
+
 	public bool HasPath => _distance != int.MaxValue;
 
 	private static Quaternion
@@ -15,6 +17,24 @@ public class GameTile : MonoBehaviour
 		eastRotation = Quaternion.Euler(90, 90, 0),
 		southRotation = Quaternion.Euler(90, 180, 0),
 		westRotation = Quaternion.Euler(90, 270, 0);
+
+	private GameTileContent _content;
+
+	public GameTileContent Content
+	{
+		get => _content;
+		set
+		{
+			Debug.Assert(value != null, "Null assigned to content!");
+			if (_content != null)
+			{
+				_content.Recycle();
+			}
+
+			_content = value;
+			_content.transform.localPosition = transform.localPosition;
+		}
+	}
 
 	/// <summary>
 	/// 如果一个瓦片是第二个瓦片的东邻，则第二个瓦片是第一个瓦片的西邻
@@ -46,7 +66,8 @@ public class GameTile : MonoBehaviour
 		neighbor._distance = _distance + 1;
 		neighbor._nextOnPath = this;
 
-		return neighbor;
+//		return neighbor;
+		return neighbor.Content.Type != GameTileContentType.Wall ? neighbor : null;
 	}
 
 	public void ShowPath()
@@ -75,6 +96,11 @@ public class GameTile : MonoBehaviour
 	{
 		_distance = 0;
 		_nextOnPath = null;
+	}
+
+	public void HidePath()
+	{
+		Arrow.gameObject.SetActive(false);
 	}
 
 	public GameTile GrowPathNorth() => GrowPathTo(_north);
