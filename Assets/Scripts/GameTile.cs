@@ -10,6 +10,8 @@ public class GameTile : MonoBehaviour
 
 	public bool IsAlternative { get; set; }
 
+	public Vector3 ExitPoint { get; set; }
+
 	public bool HasPath => _distance != int.MaxValue;
 
 	private static Quaternion
@@ -66,7 +68,8 @@ public class GameTile : MonoBehaviour
 		neighbor._distance = _distance + 1;
 		neighbor._nextOnPath = this;
 
-//		return neighbor;
+		neighbor.ExitPoint = (neighbor.transform.localPosition + transform.position) * 0.5f;
+
 		return neighbor.Content.Type != GameTileContentType.Wall ? neighbor : null;
 	}
 
@@ -96,6 +99,7 @@ public class GameTile : MonoBehaviour
 	{
 		_distance = 0;
 		_nextOnPath = null;
+		ExitPoint = transform.localPosition;
 	}
 
 	public void HidePath()

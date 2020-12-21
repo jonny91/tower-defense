@@ -12,7 +12,6 @@ public class Enemy : MonoBehaviour
 	private GameTile _tileFrom, _tileTo;
 	private Vector3 _positionFrom, _positionTo;
 	private float _progress;
-
 	private EnemyFactory _originFactory;
 
 	public EnemyFactory OriginFactory
@@ -31,7 +30,7 @@ public class Enemy : MonoBehaviour
 		_tileFrom = tile;
 		_tileTo = tile.NextTileOnPath;
 		_positionFrom = _tileFrom.transform.localPosition;
-		_positionTo = _tileTo.transform.localPosition;
+		_positionTo = _tileFrom.ExitPoint;
 		_progress = 0;
 	}
 
@@ -49,7 +48,7 @@ public class Enemy : MonoBehaviour
 			}
 
 			_positionFrom = _positionTo;
-			_positionTo = _tileTo.transform.localPosition;
+			_positionTo = _tileFrom.ExitPoint;
 			_progress -= 1f;
 		}
 

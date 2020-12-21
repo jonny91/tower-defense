@@ -16,7 +16,7 @@ public class Game : MonoBehaviour
 	[SerializeField]
 	private EnemyFactory EnemyFactory;
 
-	[SerializeField, Range(0.1F, 50F)]
+	[SerializeField, Range(0.1F, 10F)]
 	private float SpawnSpeed = 1f;
 
 	private EnemyCollection _enemies = new EnemyCollection();
