@@ -3,10 +3,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [CreateAssetMenu]
-public class GameTileContentFactory : ScriptableObject
+public class GameTileContentFactory : GameObjectFactory
 {
-	private Scene _contentScene;
-
 	[SerializeField]
 	private GameTileContent DestinationPrefab;
 
@@ -16,6 +14,9 @@ public class GameTileContentFactory : ScriptableObject
 	[SerializeField]
 	private GameTileContent WallPrefab;
 
+	[SerializeField]
+	private GameTileContent SpawnPointPrefab;
+
 	public void Reclaim(GameTileContent content)
 	{
 		Debug.Assert(content.OriginFactory == this, "Wrong factory reclaimed!");
@@ -24,9 +25,8 @@ public class GameTileContentFactory : ScriptableObject
 
 	public GameTileContent Get(GameTileContent prefab)
 	{
-		GameTileContent instance = Instantiate(prefab);
+		GameTileContent instance = CreateGameObjectInstance(prefab);
 		instance.OriginFactory = this;
-		MoveToFactoryScene(instance.gameObject);
 		return instance;
 	}
 
@@ -40,30 +40,11 @@ public class GameTileContentFactory : ScriptableObject
 				return Get(DestinationPrefab);
 			case GameTileContentType.Wall:
 				return Get(WallPrefab);
+			case GameTileContentType.SpawnPoint:
+				return Get(SpawnPointPrefab);
 		}
 
 		Debug.Assert(false, "Unsupported type: " + type);
 		return null;
-	}
-
-	private void MoveToFactoryScene(GameObject o)
-	{
-		if (!_contentScene.isLoaded)
-		{
-			if (Application.isEditor)
-			{
-				_contentScene = SceneManager.GetSceneByName(name);
-				if (!_contentScene.isLoaded)
-				{
-					_contentScene = SceneManager.CreateScene(name);
-				}
-			}
-			else
-			{
-				_contentScene = SceneManager.CreateScene(name);
-			}
-		}
-
-		SceneManager.MoveGameObjectToScene(o, _contentScene);
 	}
 }

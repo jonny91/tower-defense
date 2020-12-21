@@ -57,7 +57,7 @@ public class GameTile : MonoBehaviour
 
 	private GameTile GrowPathTo(GameTile neighbor)
 	{
-		Debug.Assert(this.HasPath, "No Path !");
+		Debug.Assert(this.HasPath, "No Path!");
 		if (!HasPath || neighbor == null || neighbor.HasPath)
 		{
 			return null;
@@ -102,6 +102,8 @@ public class GameTile : MonoBehaviour
 	{
 		Arrow.gameObject.SetActive(false);
 	}
+
+	public GameTile NextTileOnPath => _nextOnPath;
 
 	public GameTile GrowPathNorth() => GrowPathTo(_north);
 	public GameTile GrowPathEast() => GrowPathTo(_east);
