@@ -10,6 +10,8 @@ public class GameTile : MonoBehaviour
 
 	public bool IsAlternative { get; set; }
 
+	public Direction PathDirection { get; set; }
+
 	public Vector3 ExitPoint { get; set; }
 
 	public bool HasPath => _distance != int.MaxValue;
@@ -57,7 +59,7 @@ public class GameTile : MonoBehaviour
 		south._north = north;
 	}
 
-	private GameTile GrowPathTo(GameTile neighbor)
+	private GameTile GrowPathTo(GameTile neighbor, Direction direction)
 	{
 		Debug.Assert(this.HasPath, "No Path!");
 		if (!HasPath || neighbor == null || neighbor.HasPath)
@@ -69,7 +71,7 @@ public class GameTile : MonoBehaviour
 		neighbor._nextOnPath = this;
 
 		neighbor.ExitPoint = (neighbor.transform.localPosition + transform.position) * 0.5f;
-
+		neighbor.PathDirection = direction;
 		return neighbor.Content.Type != GameTileContentType.Wall ? neighbor : null;
 	}
 
@@ -109,8 +111,8 @@ public class GameTile : MonoBehaviour
 
 	public GameTile NextTileOnPath => _nextOnPath;
 
-	public GameTile GrowPathNorth() => GrowPathTo(_north);
-	public GameTile GrowPathEast() => GrowPathTo(_east);
-	public GameTile GrowPathSouth() => GrowPathTo(_south);
-	public GameTile GrowPathWest() => GrowPathTo(_west);
+	public GameTile GrowPathNorth() => GrowPathTo(_north, Direction.South);
+	public GameTile GrowPathEast() => GrowPathTo(_east, Direction.West);
+	public GameTile GrowPathSouth() => GrowPathTo(_south, Direction.North);
+	public GameTile GrowPathWest() => GrowPathTo(_west, Direction.East);
 }
