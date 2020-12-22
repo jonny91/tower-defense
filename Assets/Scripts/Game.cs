@@ -58,6 +58,8 @@ public class Game : MonoBehaviour
 		}
 
 		_enemies.GameUpdate();
+		Physics.SyncTransforms();
+		Board.GameUpdate();
 	}
 
 	private void SpawnEnemy()
@@ -90,7 +92,14 @@ public class Game : MonoBehaviour
 		var tile = Board.GetTile(TouchRay);
 		if (tile != null)
 		{
-			Board.ToggleWall(tile);
+			if (Input.GetKey(KeyCode.LeftShift))
+			{
+				Board.ToggleTower(tile);
+			}
+			else
+			{
+				Board.ToggleWall(tile);
+			}
 		}
 	}
 
